@@ -33,7 +33,8 @@ public class TimelineActivity extends Activity {
 				TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
 				lvTweets.setAdapter(adapter);
 
-				Log.d("DEBUB", jsonTweets.toString());
+				Log.d("DEBUG", Integer.toString(tweets.size()));
+				Log.d("DEBUG", jsonTweets.toString());
 			}
 		});
 	}
@@ -45,16 +46,18 @@ public class TimelineActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent i) {
-		JSONObject jsonTweet;
-		try {
-			jsonTweet = new JSONObject(i.getExtras().getString("jsonTweet"));
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return;
+		if (resultCode == RESULT_OK) {
+			JSONObject jsonTweet;
+			try {
+				jsonTweet = new JSONObject(i.getExtras().getString("jsonTweet"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return;
+			}
+			Tweet tweet = Tweet.fromJson(jsonTweet);
+			TweetsAdapter adapter = (TweetsAdapter) lvTweets.getAdapter();
+			adapter.insert(tweet, 0);
 		}
-		Tweet tweet = Tweet.fromJson(jsonTweet);
-		TweetsAdapter adapter = (TweetsAdapter) lvTweets.getAdapter();
-		adapter.insert(tweet, 0);
 	} 
 	
 

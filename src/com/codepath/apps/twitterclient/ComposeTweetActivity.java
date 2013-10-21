@@ -40,12 +40,13 @@ public class ComposeTweetActivity extends Activity {
 				i.putExtra("jsonTweet", jsonTweet.toString());
 				setResult(RESULT_OK, i);
 				finish();
-				Log.d("DEBUB", jsonTweet.toString());
+				Log.d("DEBUG", jsonTweet.toString());
 			}
 		});
 	}
 	
 	public void onCancelClick(View v) {
+		setResult(RESULT_CANCELED, null); 
 		finish();
 	}
 
