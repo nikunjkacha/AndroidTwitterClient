@@ -1,14 +1,11 @@
 package com.codepath.apps.twitterclient;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
-import android.renderscript.ProgramFragmentFixedFunction.Builder.Format;
 import android.text.Html;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.codepath.apps.twitterclient.models.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet> {
@@ -36,7 +34,8 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		Tweet tweet = getItem(position);
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
-		ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
+		User user = tweet.getUser();
+		ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), imageView);
 		
 		TextView nameView = (TextView) view.findViewById(R.id.tvName);
 		String formattedName = "<b>" + tweet.getUser().getName() + " </b><small><font color='#777777'>@"+

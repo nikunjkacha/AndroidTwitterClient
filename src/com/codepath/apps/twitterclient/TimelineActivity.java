@@ -51,7 +51,7 @@ public class TimelineActivity extends Activity {
 	
 	public long getMaxId() {
 		TweetsAdapter adapter = (TweetsAdapter)lvTweets.getAdapter();
-		return adapter.getItem(adapter.getCount()-1).getId();
+		return adapter.getItem(adapter.getCount()-1).getTweetId();
 	}
 	
 	public void onLoadMoreClick(View view) {

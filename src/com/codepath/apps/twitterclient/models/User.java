@@ -2,48 +2,38 @@ package com.codepath.apps.twitterclient.models;
 
 import org.json.JSONObject;
 
-public class User extends BaseModel {
-	public String getName() {
-		return getString("name");
-	}
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
-	public long getId() {
-		return getLong("id");
+@Table(name = "Users")
+public class User extends BaseModel {
+	@Column(name = "Name")
+	private String name;
+	@Column(name = "ScreenName")
+	private String screenName;
+	@Column(name = "ProfileImageUrl")
+	private String profileImageUrl;
+
+	public User(JSONObject jsonObject) {
+		super(jsonObject);
+		name = getString("name");
+		screenName = getString("screen_name");
+		profileImageUrl = getString("profile_image_url");
+	}
+	
+	public String getName() {
+		return name;
 	}
 
 	public String getScreenName() {
-		return getString("screen_name");
+		return screenName;
 	}
 
 	public String getProfileImageUrl() {
-		return getString("profile_image_url");
+		return profileImageUrl;
 	}
 
-	public String getProfileBackgroundImageUrl() {
-		return getString("profile_background_image_url");
-	}
-
-	public int getNumTweets() {
-		return getInt("statuses_count");
-	}
-
-	public int getFollowersCount() {
-		return getInt("followers_count");
-	}
-	
-	public int getFriendsCount() {
-		return getInt("friends_count");
-	}
-	
-	public static User fromJson(JSONObject json) {
-		User u = new User();
-		
-		try {
-			u.jsonObject = json;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return u;
+	public static User fromJson(JSONObject jsonObject) {
+		return new User(jsonObject);
 	}
 }

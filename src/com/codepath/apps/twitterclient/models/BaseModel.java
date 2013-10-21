@@ -3,8 +3,15 @@ package com.codepath.apps.twitterclient.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class BaseModel {
-	protected JSONObject jsonObject;
+import com.activeandroid.Model;
+
+public class BaseModel extends Model {
+	private JSONObject jsonObject;
+	
+	public BaseModel(JSONObject jsonObject) {
+		super();
+		this.jsonObject = jsonObject;
+	}
 	
 	public String getString(String name) {
 		try {

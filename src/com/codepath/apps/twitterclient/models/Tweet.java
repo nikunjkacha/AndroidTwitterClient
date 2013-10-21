@@ -10,36 +10,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.text.format.DateFormat;
+import com.activeandroid.annotation.Column;
+import com.activeandroid.annotation.Table;
 
+@Table(name = "Tweets")
 public class Tweet extends BaseModel {
+	@Column(name = "User")
 	private User user;
-	
-	public User getUser() {
-		return user;
-	}
-	
-	public String getBody() {
-		return getString("text");
-	}
-	
-	public long getId() {
-		return getLong("id");
-	}
+	@Column(name = "Body")
+	private String body;
+	@Column(name = "Id")
+	private long id;
+	@Column(name = "CreatedAt")
+	private String createdAt;
 
-	public boolean isFavorited() {
-		return getBoolean("favorited");
-	}
-
-	public boolean isRetweeted() {
-		return getBoolean("retweeted");
+	public Tweet(JSONObject jsonObject) throws JSONException {
+		super(jsonObject);
+		user = User.fromJson(jsonObject.getJSONObject("user"));
+		body = getString("text");
+		id = getLong("id");
+		createdAt = getString("created_at");
 	}
 
 	public Date getDate() {
 		Date d;
 		try {
-			String dateString = getString("created_at");
-			d = new SimpleDateFormat("EE MMM DD HH:mm:ss Z yyyy", Locale.ENGLISH).parse(dateString);
+			d = new SimpleDateFormat(
+					"EE MMM DD HH:mm:ss Z yyyy", Locale.ENGLISH
+					).parse(createdAt);
 //			Sat Oct 19 17:03:38 +0000 2013
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -47,12 +45,23 @@ public class Tweet extends BaseModel {
 		}
 		return d;
 	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public String getBody() {
+		return body;
+	}
+
+	public long getTweetId() {
+		return id;
+	}
 
 	public static Tweet fromJson(JSONObject jsonObject) {
-		Tweet tweet = new Tweet();
+		Tweet tweet;
 		try {
-			tweet.jsonObject = jsonObject;
-			tweet.user = User.fromJson(jsonObject.getJSONObject("user"));
+			tweet = new Tweet(jsonObject);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
