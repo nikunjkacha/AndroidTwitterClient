@@ -1,10 +1,9 @@
 package com.codepath.apps.twitterclient;
 
-import java.util.ArrayList;
-
-import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -36,12 +35,12 @@ public class ComposeTweetActivity extends Activity {
 		TwitterClientApp.getRestClient().postTweet(tweetText,
 				new JsonHttpResponseHandler() {
 			@Override
-			public void onSuccess(JSONArray jsonTweets) {
-//				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-//				ListView lvTweets = (ListView) findViewById(R.id.lvTweets);
-//				TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
-//				lvTweets.setAdapter(adapter);
-				Log.d("DEBUB", jsonTweets.toString());
+			public void onSuccess(JSONObject jsonTweet) {
+				Intent i = new Intent();
+				i.putExtra("jsonTweet", jsonTweet.toString());
+				setResult(RESULT_OK, i);
+				finish();
+				Log.d("DEBUB", jsonTweet.toString());
 			}
 		});
 	}
