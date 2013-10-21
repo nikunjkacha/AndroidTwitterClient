@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.models.Tweet;
@@ -25,18 +26,36 @@ public class TimelineActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_timeline);
 		lvTweets = (ListView) findViewById(R.id.lvTweets);
-		
-		TwitterClientApp.getRestClient().getHomeTimeline(new JsonHttpResponseHandler() {
+		updateHomeTimeline(-1);
+	}
+	
+	public void updateHomeTimeline(long maxId) {
+		TwitterClientApp.getRestClient().getHomeTimeline(maxId,
+				new JsonHttpResponseHandler() {
 			@Override
 			public void onSuccess(JSONArray jsonTweets) {
 				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-				TweetsAdapter adapter = new TweetsAdapter(getBaseContext(), tweets);
-				lvTweets.setAdapter(adapter);
+				TweetsAdapter adapter = (TweetsAdapter) lvTweets.getAdapter();
+				if (adapter == null) {
+					adapter = new TweetsAdapter(getBaseContext(), tweets);
+					lvTweets.setAdapter(adapter);
+				} else {
+					adapter.addAll(tweets);
+				}
 
 				Log.d("DEBUG", Integer.toString(tweets.size()));
 				Log.d("DEBUG", jsonTweets.toString());
 			}
 		});
+	}
+	
+	public long getMaxId() {
+		TweetsAdapter adapter = (TweetsAdapter)lvTweets.getAdapter();
+		return adapter.getItem(adapter.getCount()-1).getId();
+	}
+	
+	public void onLoadMoreClick(View view) {
+		updateHomeTimeline(getMaxId()-1);
 	}
 	
 	public void onComposeClick(MenuItem menuItem) {

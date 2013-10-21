@@ -10,23 +10,17 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
-import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class ComposeTweetActivity extends Activity {
 	private EditText etTweetText;
-	private Button btnTweet;
-	private Button btnCancel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_compose_tweet);
 		etTweetText = (EditText) findViewById(R.id.etTweetText);
-		btnTweet = (Button) findViewById(R.id.btnTweet);
-		btnCancel = (Button) findViewById(R.id.btnCancel);
 	}
 	
 	public void onTweetClick(View v) {
