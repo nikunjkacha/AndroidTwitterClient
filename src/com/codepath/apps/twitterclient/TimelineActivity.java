@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterclient;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 
+import com.activeandroid.query.Select;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -27,6 +29,10 @@ public class TimelineActivity extends Activity {
 		setContentView(R.layout.activity_timeline);
 		lvTweets = (ListView) findViewById(R.id.lvTweets);
 		updateHomeTimeline(-1);
+//		List<Tweet> tweets =
+//				new Select()
+//				.from(Tweet.class)
+//				.execute();
 	}
 	
 	public void updateHomeTimeline(long maxId) {

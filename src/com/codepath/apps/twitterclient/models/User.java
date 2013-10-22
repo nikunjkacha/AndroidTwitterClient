@@ -1,12 +1,14 @@
 package com.codepath.apps.twitterclient.models;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 @Table(name = "Users")
-public class User extends BaseModel {
+public class User extends Model {
 	@Column(name = "Name")
 	private String name;
 	@Column(name = "ScreenName")
@@ -14,11 +16,11 @@ public class User extends BaseModel {
 	@Column(name = "ProfileImageUrl")
 	private String profileImageUrl;
 
-	public User(JSONObject jsonObject) {
-		super(jsonObject);
-		name = getString("name");
-		screenName = getString("screen_name");
-		profileImageUrl = getString("profile_image_url");
+	public User(JSONObject jsonObject) throws JSONException {
+		super();
+		name = jsonObject.getString("name");
+		screenName = jsonObject.getString("screen_name");
+		profileImageUrl = jsonObject.getString("profile_image_url");
 	}
 	
 	public String getName() {
@@ -34,6 +36,13 @@ public class User extends BaseModel {
 	}
 
 	public static User fromJson(JSONObject jsonObject) {
-		return new User(jsonObject);
+		try {
+			User user = new User(jsonObject);
+			user.save();
+			return user;
+		} catch (JSONException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

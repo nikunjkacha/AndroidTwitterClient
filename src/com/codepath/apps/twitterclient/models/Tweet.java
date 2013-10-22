@@ -10,11 +10,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
 
 @Table(name = "Tweets")
-public class Tweet extends BaseModel {
+public class Tweet extends Model {
 	@Column(name = "User")
 	private User user;
 	@Column(name = "Body")
@@ -25,11 +26,11 @@ public class Tweet extends BaseModel {
 	private String createdAt;
 
 	public Tweet(JSONObject jsonObject) throws JSONException {
-		super(jsonObject);
+		super();
 		user = User.fromJson(jsonObject.getJSONObject("user"));
-		body = getString("text");
-		id = getLong("id");
-		createdAt = getString("created_at");
+		body = jsonObject.getString("text");
+		id = jsonObject.getLong("id");
+		createdAt = jsonObject.getString("created_at");
 	}
 
 	public Date getDate() {
@@ -59,14 +60,14 @@ public class Tweet extends BaseModel {
 	}
 
 	public static Tweet fromJson(JSONObject jsonObject) {
-		Tweet tweet;
 		try {
-			tweet = new Tweet(jsonObject);
+			Tweet tweet = new Tweet(jsonObject);
+			tweet.save();
+			return tweet;
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
-		return tweet;
 	}
 
 	public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {
