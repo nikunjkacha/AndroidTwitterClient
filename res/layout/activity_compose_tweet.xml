@@ -37,14 +37,4 @@
         android:ems="10"
         android:inputType="textMultiLine" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnCancel"
-        android:layout_alignBottom="@+id/btnCancel"
-        android:layout_alignRight="@+id/etTweetText"
-        android:text="Large Text"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
 </RelativeLayout>
