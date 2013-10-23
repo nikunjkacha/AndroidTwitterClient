@@ -20,31 +20,39 @@ public class Tweet extends Model {
 	private User user;
 	@Column(name = "Body")
 	private String body;
-	@Column(name = "Id")
-	private long id;
+	@Column(name = "TweetId")
+	private long tweetId;
 	@Column(name = "CreatedAt")
-	private String createdAt;
+	private Date createdAt;
+	
+	public Tweet() {
+		super();
+	}
 
 	public Tweet(JSONObject jsonObject) throws JSONException {
 		super();
 		user = User.fromJson(jsonObject.getJSONObject("user"));
 		body = jsonObject.getString("text");
-		id = jsonObject.getLong("id");
-		createdAt = jsonObject.getString("created_at");
+		tweetId = jsonObject.getLong("id");
+		createdAt = parseDate(jsonObject.getString("created_at"));
 	}
 
-	public Date getDate() {
+	private Date parseDate(String date) {
 		Date d;
 		try {
 			d = new SimpleDateFormat(
 					"EE MMM DD HH:mm:ss Z yyyy", Locale.ENGLISH
-					).parse(createdAt);
+					).parse(date);
 //			Sat Oct 19 17:03:38 +0000 2013
 		} catch (ParseException e) {
 			e.printStackTrace();
 			return null;
 		}
 		return d;
+	}
+	
+	public Date getDate() {
+		return createdAt;
 	}
 	
 	public User getUser() {
@@ -56,18 +64,19 @@ public class Tweet extends Model {
 	}
 
 	public long getTweetId() {
-		return id;
+		return tweetId;
 	}
 
 	public static Tweet fromJson(JSONObject jsonObject) {
+		Tweet tweet = null;
 		try {
-			Tweet tweet = new Tweet(jsonObject);
-			tweet.save();
-			return tweet;
+			tweet = new Tweet(jsonObject);
 		} catch (JSONException e) {
 			e.printStackTrace();
 			return null;
 		}
+		tweet.save();
+		return tweet;
 	}
 
 	public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {

@@ -16,6 +16,10 @@ public class User extends Model {
 	@Column(name = "ProfileImageUrl")
 	private String profileImageUrl;
 
+	public User() {
+		super();
+	}
+
 	public User(JSONObject jsonObject) throws JSONException {
 		super();
 		name = jsonObject.getString("name");

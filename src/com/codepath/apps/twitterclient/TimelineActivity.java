@@ -8,7 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -29,39 +32,58 @@ public class TimelineActivity extends Activity {
 		setContentView(R.layout.activity_timeline);
 		lvTweets = (ListView) findViewById(R.id.lvTweets);
 		updateHomeTimeline(-1);
-//		List<Tweet> tweets =
-//				new Select()
-//				.from(Tweet.class)
-//				.execute();
 	}
 	
-	public void updateHomeTimeline(long maxId) {
-		TwitterClientApp.getRestClient().getHomeTimeline(maxId,
-				new JsonHttpResponseHandler() {
-			@Override
-			public void onSuccess(JSONArray jsonTweets) {
-				ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-				TweetsAdapter adapter = (TweetsAdapter) lvTweets.getAdapter();
-				if (adapter == null) {
-					adapter = new TweetsAdapter(getBaseContext(), tweets);
-					lvTweets.setAdapter(adapter);
-				} else {
-					adapter.addAll(tweets);
-				}
+	public void displayTweets(List<Tweet> tweets) {
+		TweetsAdapter adapter = (TweetsAdapter) lvTweets.getAdapter();
+		if (adapter == null) {
+			adapter = new TweetsAdapter(getBaseContext(), tweets);
+			lvTweets.setAdapter(adapter);
+		} else {
+			adapter.addAll(tweets);
+		}
+	}
+	
+	private boolean isNetworkConnected() {
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo ni = cm.getActiveNetworkInfo();
+		return (ni != null && ni.isAvailable() && ni.isConnected());
+	}
 
-				Log.d("DEBUG", Integer.toString(tweets.size()));
-				Log.d("DEBUG", jsonTweets.toString());
+	public void updateHomeTimeline(long maxId) {
+		if (isNetworkConnected()) {
+			TwitterClientApp.getRestClient().getHomeTimeline(maxId,
+					new JsonHttpResponseHandler() {
+				@Override
+				public void onSuccess(JSONArray jsonTweets) {
+					ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
+					displayTweets(tweets);
+					Log.d("DEBUG", Integer.toString(tweets.size()));
+					Log.d("DEBUG", jsonTweets.toString());
+				}
+			});
+		} else {
+			List<Tweet> tweets = new ArrayList<Tweet>();
+			if (lvTweets.getAdapter() == null) {
+				tweets = new Select()
+				.from(Tweet.class)
+				.orderBy("createdAt")
+				.limit("25")
+				.execute();
 			}
-		});
+			displayTweets(tweets);
+		}
 	}
 	
-	public long getMaxId() {
+	public long getMinId() {
 		TweetsAdapter adapter = (TweetsAdapter)lvTweets.getAdapter();
 		return adapter.getItem(adapter.getCount()-1).getTweetId();
 	}
 	
 	public void onLoadMoreClick(View view) {
-		updateHomeTimeline(getMaxId()-1);
+		if (isNetworkConnected()) {
+			updateHomeTimeline(getMinId()-1);
+		}
 	}
 	
 	public void onComposeClick(MenuItem menuItem) {
