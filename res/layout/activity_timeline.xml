@@ -4,23 +4,13 @@
     android:layout_height="match_parent"
     tools:context=".TimelineActivity" >
 
-    <ListView
-        android:id="@+id/lvTweets"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/btnLoadMore"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
-    </ListView>
-
-    <Button
-        android:id="@+id/btnLoadMore"
+    <fragment
+        android:id="@+id/fragmentTweets"
+        android:name="com.codepath.apps.twitterclient.fragments.TweetsListFragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:onClick="onLoadMoreClick"
-        android:text="Load More" />
+        tools:layout="@layout/fragments_tweets_list" />
 
 </RelativeLayout>
