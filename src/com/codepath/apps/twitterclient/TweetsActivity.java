@@ -1,8 +1,5 @@
 package com.codepath.apps.twitterclient;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -16,7 +13,6 @@ import android.view.MenuItem;
 
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsFragment;
-import com.codepath.apps.twitterclient.models.Tweet;
 
 public class TweetsActivity extends FragmentActivity implements TabListener {
 
@@ -33,18 +29,24 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 		actionBar.setDisplayShowTitleEnabled(true);
 		Tab tabHome = actionBar.newTab().setText("Home")
 				.setTag("HomeTimelineFragment")
+				.setIcon(R.drawable.ic_home)
 				.setTabListener(this);
 		Tab tabMentions = actionBar.newTab().setText("Mentions")
 				.setTag("MentionsTimelineFragment")
+				.setIcon(R.drawable.ic_mentions)
 				.setTabListener(this);
 		actionBar.addTab(tabHome);
 		actionBar.addTab(tabMentions);
 		actionBar.selectTab(tabHome);
 	}
+	public void onProfileClick(MenuItem menuItem) {
+		Intent i = new Intent(this, ProfileActivity.class);
+		startActivity(i);
+	}
 
 	public void onComposeClick(MenuItem menuItem) {
 		Intent i = new Intent(this, ComposeTweetActivity.class);
-		startActivityForResult(i, 1337);
+		startActivityForResult(i, 1338);
 	}
 
 //	@Override
@@ -66,7 +68,7 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.timeline, menu);
+		getMenuInflater().inflate(R.menu.tweets, menu);
 		return true;
 	}
 

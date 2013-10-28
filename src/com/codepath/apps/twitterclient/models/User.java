@@ -13,8 +13,14 @@ public class User extends Model {
 	private String name;
 	@Column(name = "ScreenName")
 	private String screenName;
+	@Column(name = "Description")
+	private String description;
 	@Column(name = "ProfileImageUrl")
 	private String profileImageUrl;
+	@Column(name = "FollowersCount")
+	private int followersCount;
+	@Column(name = "FriendsCount")
+	private int friendsCount;
 
 	public User() {
 		super();
@@ -24,7 +30,10 @@ public class User extends Model {
 		super();
 		name = jsonObject.getString("name");
 		screenName = jsonObject.getString("screen_name");
+		description = jsonObject.getString("description");
 		profileImageUrl = jsonObject.getString("profile_image_url");
+		followersCount = jsonObject.getInt("followers_count");
+		friendsCount = jsonObject.getInt("friends_count");
 	}
 	
 	public String getName() {
@@ -35,8 +44,20 @@ public class User extends Model {
 		return screenName;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
 	public String getProfileImageUrl() {
 		return profileImageUrl;
+	}
+
+	public int getFollowersCount() {
+		return followersCount;
+	}
+
+	public int getFriendsCount() {
+		return friendsCount;
 	}
 
 	public static User fromJson(JSONObject jsonObject) {

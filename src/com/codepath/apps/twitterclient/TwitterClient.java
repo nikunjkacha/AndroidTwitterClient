@@ -61,6 +61,16 @@ public class TwitterClient extends OAuthBaseClient {
     	client.get(url, null, handler);
     }
 
+    public void getMyInfo(AsyncHttpResponseHandler handler) {
+    	String url = getApiUrl("account/verify_credentials.json");
+    	client.get(url, null, handler);
+    }
+
+    public void getUserTimeline(AsyncHttpResponseHandler handler) {
+    	String url = getApiUrl("statuses/user_timeline.json");
+    	client.get(url, null, handler);
+    }
+
     // CHANGE THIS
     // DEFINE METHODS for different API endpoints here
     public void getInterestingnessList(AsyncHttpResponseHandler handler) {
