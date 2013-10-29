@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.activeandroid.query.Select;
+import com.codepath.apps.twitterclient.EndlessScroll;
 import com.codepath.apps.twitterclient.TwitterClientApp;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -19,8 +20,20 @@ public class HomeTimelineFragment extends TweetsListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		updateHomeTimeline(-1);
 	}
+	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		lvTweets.setOnScrollListener(new EndlessScroll() {
+			@Override
+			public void onLoadMore(int page, 
+					int totalItemsCount) {
+				updateHomeTimeline(getMinId()-1);
+			}
+		});
+		updateHomeTimeline(-1);
+	};
 
 	private boolean isNetworkConnected() {
 		ConnectivityManager cm =

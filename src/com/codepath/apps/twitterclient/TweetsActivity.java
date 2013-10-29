@@ -14,7 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
-import com.codepath.apps.twitterclient.fragments.MentionsFragment;
+import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -101,7 +101,7 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 		if (tab.getTag() == "HomeTimelineFragment") {
 			fts.replace(R.id.frameContainer, new HomeTimelineFragment());
 		} else {
-			fts.replace(R.id.frameContainer, new MentionsFragment());
+			fts.replace(R.id.frameContainer, new MentionsTimelineFragment());
 		}
 		fts.commit();
 	}
