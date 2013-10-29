@@ -65,13 +65,11 @@
 
 	</LinearLayout>
 
-    <fragment
-        android:id="@+id/fragmentUserTimeline"
-        android:name="com.codepath.apps.twitterclient.fragments.UserTimelineFragment"
+    <FrameLayout
+        android:id="@+id/frameUserTimeline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llCounts"
-        android:layout_centerHorizontal="true"
-        tools:layout="@layout/fragments_tweets_list" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

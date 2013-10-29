@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +35,17 @@ public class TweetsAdapter extends ArrayAdapter<Tweet> {
 		Tweet tweet = getItem(position);
 		
 		ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
-		User user = tweet.getUser();
+		final User user = tweet.getUser();
 		ImageLoader.getInstance().displayImage(user.getProfileImageUrl(), imageView);
-		
+
+		imageView.setOnClickListener(new View.OnClickListener(){
+		    public void onClick(View v) {
+				Intent i = new Intent(getContext(), ProfileActivity.class);
+				i.putExtra("user", user);
+				getContext().startActivity(i);
+		    }
+		});
+
 		TextView nameView = (TextView) view.findViewById(R.id.tvName);
 		String formattedName = "<b>" + tweet.getUser().getName() + " </b><small><font color='#777777'>@"+
 				tweet.getUser().getScreenName() + "</font><small>";

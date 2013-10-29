@@ -1,5 +1,7 @@
 package com.codepath.apps.twitterclient;
 
+import org.json.JSONObject;
+
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -13,14 +15,28 @@ import android.view.MenuItem;
 
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsFragment;
+import com.codepath.apps.twitterclient.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TweetsActivity extends FragmentActivity implements TabListener {
+	User myUser;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tweets);
 		setupNavigationTabs();
+		loadMyProfileInfo();
+	}
+	
+	public void loadMyProfileInfo() {
+		TwitterClientApp.getRestClient().getMyInfo(
+				new JsonHttpResponseHandler() {
+					@Override
+					public void onSuccess(JSONObject json) {
+						myUser = User.fromJson(json);
+					}
+				});
 	}
 	
 	public void setupNavigationTabs() {
@@ -39,14 +55,16 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 		actionBar.addTab(tabMentions);
 		actionBar.selectTab(tabHome);
 	}
+
 	public void onProfileClick(MenuItem menuItem) {
 		Intent i = new Intent(this, ProfileActivity.class);
+		i.putExtra("user", myUser);
 		startActivity(i);
 	}
 
 	public void onComposeClick(MenuItem menuItem) {
 		Intent i = new Intent(this, ComposeTweetActivity.class);
-		startActivityForResult(i, 1338);
+		startActivityForResult(i, 1337);
 	}
 
 //	@Override

@@ -1,15 +1,14 @@
 package com.codepath.apps.twitterclient;
 
-import org.json.JSONObject;
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitterclient.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterclient.models.User;
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class ProfileActivity extends FragmentActivity {
@@ -18,19 +17,20 @@ public class ProfileActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		loadProfileInfo();
-	}
-	
-	public void loadProfileInfo() {
-		TwitterClientApp.getRestClient().getMyInfo(
-				new JsonHttpResponseHandler() {
-					@Override
-					public void onSuccess(JSONObject json) {
-						User user = User.fromJson(json);
-						getActionBar().setTitle("@"+user.getScreenName());
-						populateProfileHeader(user);
-					}
-				});
+
+		Intent i = getIntent();
+		User user = (User) i.getSerializableExtra("user");
+		getActionBar().setTitle("@"+user.getScreenName());
+		populateProfileHeader(user);
+		
+		UserTimelineFragment userTimeline = new UserTimelineFragment();
+		Bundle args = new Bundle();
+		args.putSerializable("user", user);
+		userTimeline.setArguments(args);
+
+		getSupportFragmentManager().beginTransaction()
+		.replace(R.id.frameUserTimeline, userTimeline)
+		.commit();
 	}
 	
 	public void populateProfileHeader(User user) {
