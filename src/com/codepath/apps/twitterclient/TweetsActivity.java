@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterclient;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar;
@@ -15,11 +16,14 @@ import android.view.MenuItem;
 
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;
+import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 public class TweetsActivity extends FragmentActivity implements TabListener {
 	User myUser;
+	HomeTimelineFragment htlf;
+	MentionsTimelineFragment mtlf;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,21 +71,20 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 		startActivityForResult(i, 1337);
 	}
 
-//	@Override
-//	protected void onActivityResult(int requestCode, int resultCode, Intent i) {
-//		if (resultCode == RESULT_OK) {
-//			JSONObject jsonTweet;
-//			try {
-//				jsonTweet = new JSONObject(i.getExtras().getString("jsonTweet"));
-//			} catch (JSONException e) {
-//				e.printStackTrace();
-//				return;
-//			}
-//
-//			fragmentHomeTimeLine.pushTweet(Tweet.fromJson(jsonTweet));
-//			getActionBar().getta
-//		}
-//	} 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent i) {
+		if (resultCode == RESULT_OK) {
+			JSONObject jsonTweet;
+			try {
+				jsonTweet = new JSONObject(i.getExtras().getString("jsonTweet"));
+			} catch (JSONException e) {
+				e.printStackTrace();
+				return;
+			}
+
+			htlf.pushTweet(Tweet.fromJson(jsonTweet));
+		}
+	} 
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -99,9 +102,15 @@ public class TweetsActivity extends FragmentActivity implements TabListener {
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if (tab.getTag() == "HomeTimelineFragment") {
-			fts.replace(R.id.frameContainer, new HomeTimelineFragment());
+			if (htlf == null) {
+				htlf = new HomeTimelineFragment();
+			}
+			fts.replace(R.id.frameContainer, htlf);
 		} else {
-			fts.replace(R.id.frameContainer, new MentionsTimelineFragment());
+			if (mtlf == null) {
+				mtlf = new MentionsTimelineFragment();
+			}
+			fts.replace(R.id.frameContainer, mtlf);
 		}
 		fts.commit();
 	}
